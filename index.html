@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MBTI로 포켓몬 찾기</title>
   <style>
-    /* 포켓몬 테마 색상 (빨강, 하양, 검은 테두리, 노랑 포인트) */
     :root {
       --poke-red: #EE1515;
       --poke-red-hover: #C40B0B;
       --poke-dark: #222224;
       --poke-white: #FFFFFF;
       --poke-bg: #F8F9FA;
-      --poke-yellow: #FFDE00;
-      --poke-card-border: #222224;
+      --poke-yellow: #FFCC03;
+      --poke-blue: #3B5BA7;
     }
 
     * {
@@ -25,7 +24,6 @@
 
     body {
       background-color: var(--poke-bg);
-      /* 포켓몬 스타일 도트 배경 패턴 */
       background-image: radial-gradient(#EE1515 0.8px, transparent 0.8px), radial-gradient(#222224 0.8px, #F8F9FA 0.8px);
       background-size: 24px 24px;
       background-position: 0 0, 12px 12px;
@@ -57,27 +55,38 @@
       position: relative;
     }
 
-    /* 헤더 중앙 몬스터볼 버튼 장식 */
+    /* 몬스터볼 중앙 버튼 장식 */
     .header::after {
       content: '';
       position: absolute;
       bottom: -16px;
       left: 50%;
       transform: translateX(-50%);
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       background-color: var(--poke-white);
       border: 5px solid var(--poke-dark);
       border-radius: 50%;
       z-index: 10;
+      box-shadow: 0 0 0 3px var(--poke-white);
     }
 
-    /* 포켓몬 로고 이미지 */
-    .pokemon-logo {
-      width: 210px;
-      max-width: 80%;
-      height: auto;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    /* 인라인 몬스터볼 & 포켓몬 스타일 타이틀 */
+    .pokemon-title-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .logo-text {
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      font-size: 2.3rem;
+      color: var(--poke-yellow);
+      letter-spacing: 1px;
+      -webkit-text-stroke: 2px var(--poke-blue);
+      text-shadow: 3px 3px 0 var(--poke-dark);
+      transform: skewX(-6deg);
     }
 
     .content {
@@ -141,13 +150,12 @@
       color: var(--poke-white);
       font-size: 1.2rem;
       font-weight: 800;
-      padding: 6px 20px;
+      padding: 6px 22px;
       border-radius: 20px;
       border: 2px solid var(--poke-dark);
       margin-bottom: 12px;
     }
 
-    /* 포켓몬 이미지 원형 배경 */
     .pokemon-img-box {
       width: 210px;
       height: 210px;
@@ -178,6 +186,13 @@
       filter: drop-shadow(0 8px 12px rgba(0,0,0,0.18));
     }
 
+    .pokemon-emoji-fallback {
+      font-size: 6rem;
+      position: relative;
+      z-index: 2;
+      display: none;
+    }
+
     .pokemon-name {
       font-size: 1.85rem;
       font-weight: 900;
@@ -185,7 +200,6 @@
       margin-bottom: 16px;
     }
 
-    /* 이유 설명 박스 */
     .reason-box {
       background-color: #F8F9FA;
       border: 3px solid var(--poke-dark);
@@ -199,7 +213,6 @@
       word-break: keep-all;
     }
 
-    /* 궁합 박스 */
     .match-box {
       background-color: #FFF0F0;
       border: 2px solid var(--poke-red);
@@ -211,7 +224,6 @@
       margin-bottom: 24px;
     }
 
-    /* 다시 고르기 버튼 */
     .reset-btn {
       background-color: var(--poke-red);
       border: 3px solid var(--poke-dark);
@@ -238,10 +250,35 @@
       box-shadow: 0 2px 0 var(--poke-dark);
     }
 
-    /* 모바일 가로폭 대응 */
     @media (max-width: 480px) {
       .mbti-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-      .pokemon-logo { width: 170px; }
-      .pokemon-img-box { width: 17
+      .logo-text { font-size: 1.8rem; }
+      .pokemon-img-box { width: 170px; height: 170px; }
+      .pokemon-img-box::before { width: 140px; height: 140px; }
+      .subtitle { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- 헤더 영역 -->
+    <div class="header">
+      <div class="pokemon-title-logo">
+        <svg width="38" height="38" viewBox="0 0 100 100" style="vertical-align: middle;">
+          <circle cx="50" cy="50" r="45" fill="#EE1515" stroke="#222224" stroke-width="8"/>
+          <path d="M 5,50 A 45,45 0 0,0 95,50 Z" fill="#FFFFFF" stroke="#222224" stroke-width="8"/>
+          <line x1="5" y1="50" x2="95" y2="50" stroke="#222224" stroke-width="8"/>
+          <circle cx="50" cy="50" r="14" fill="#FFFFFF" stroke="#222224" stroke-width="8"/>
+        </svg>
+        <span class="logo-text">Pokémon</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- 1. MBTI 선택 화면 -->
+      <div id="selection-screen">
+        <h2 class="subtitle">나의 MBTI 유형을 선택해 주세요!</h2>
+        <div class="mbti-grid" id="mbti-grid
